@@ -1,3 +1,4 @@
+from components.ui.stats import statistik
 from components.ui.full_calendar import kalender
 import streamlit as st
 from database import cursor
@@ -52,3 +53,5 @@ def dashboard():
     pruefkalender()
 st.divider()
 kalender()
+st.divider()
+statistik()

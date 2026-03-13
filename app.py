@@ -20,6 +20,8 @@ seite = st.sidebar.radio(
     [
         "Dashboard",
         "Fahrzeuge",
+	"Material",
+	"QR Scanner",
         "Ortsverein",
         "Lerchenstraße"
     ]
@@ -36,3 +38,9 @@ if seite == "Ortsverein":
 
 if seite == "Lerchenstraße":
     st.switch_page("pages/lerchenstrasse.py")
+
+if seite == "Material":
+    st.switch_page("pages/material.py")
+
+if seite == "QR Scanner":
+    st.switch_page("pages/scanner.py")

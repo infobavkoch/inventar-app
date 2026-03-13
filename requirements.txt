@@ -3,6 +3,5 @@ pandas
 sqlalchemy
 qrcode
 pillow
-streamlit-authenticator
-yagmail
-opencv-python
+plotly
+streamlit-qrcode-scanner
