@@ -1,3 +1,4 @@
+import database
 import streamlit as st
 from auth import login
 from components.dashboard import dashboard
