@@ -2,34 +2,50 @@ import streamlit as st
 from database import cursor
 from datetime import datetime
 from components.utils import pruef_status
+from components.ui.cards import warnkarte
+from components.ui.calendar import pruefkalender
 
 
 def dashboard():
 
-    st.header("Dashboard")
+    st.title("Dashboard")
 
-    cursor.execute("SELECT bezeichnung, tuev FROM fahrzeuge")
+    cursor.execute("SELECT bezeichnung,tuev FROM fahrzeuge")
+
     daten = cursor.fetchall()
 
-    warnungen = []
+    rot=0
+    gelb=0
+    gruen=0
 
     for d in daten:
 
         if d[1]:
 
-            datum = datetime.fromisoformat(str(d[1])).date()
+            datum = datetime.fromisoformat(d[1]).date()
+
             status = pruef_status(datum)
 
-            if "🔴" in status or "🟡" in status:
-                warnungen.append((d[0], datum, status))
+            if "🔴" in status:
+                rot+=1
 
-    if warnungen:
+            elif "🟡" in status:
+                gelb+=1
 
-        st.subheader("⚠ Prüfungen bald fällig")
+            else:
+                gruen+=1
 
-        for w in warnungen:
-            st.write(f"🚑 {w[0]} — TÜV {w[1]} {w[2]}")
+    col1,col2,col3 = st.columns(3)
 
-    else:
+    with col1:
+        warnkarte("Überfällige Prüfungen",rot,"rot")
 
-        st.success("Alle Prüfungen aktuell")
+    with col2:
+        warnkarte("Bald fällig",gelb,"gelb")
+
+    with col3:
+        warnkarte("Alles OK",gruen,"gruen")
+
+    st.divider()
+
+    pruefkalender()
