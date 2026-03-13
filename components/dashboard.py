@@ -1,6 +1,6 @@
 import streamlit as st
 from database import cursor
-from datetime import datetime
+from datetime import datetime, date
 from components.utils import pruef_status
 
 
@@ -8,30 +8,27 @@ def dashboard():
 
     st.header("Dashboard")
 
-    cursor.execute("SELECT bezeichnung,tuev FROM fahrzeuge")
+    cursor.execute("SELECT bezeichnung, tuev FROM fahrzeuge")
     daten = cursor.fetchall()
 
-    warnungen = []
+    if len(daten) == 0:
+        st.info("Noch keine Fahrzeuge angelegt.")
+        return
 
-    for d in daten:
+    for fahrzeug in daten:
 
-        if d[1]:
+        name = fahrzeug[0]
+        tuev = fahrzeug[1]
 
-            datum = datetime.fromisoformat(str(d[1])).date()
+        if tuev:
+
+            try:
+                datum = datetime.fromisoformat(tuev).date()
+            except:
+                continue
 
             status = pruef_status(datum)
 
-            if "🔴" in status or "🟡" in status:
-                warnungen.append((d[0], datum, status))
-
-    if warnungen:
-
-        st.subheader("⚠ Prüfungen bald fällig")
-
-        for w in warnungen:
-
-            st.write(f"🚑 {w[0]} — TÜV {w[1]} {w[2]}")
-
-    else:
-
-        st.success("Alle Prüfungen aktuell")
+            st.write(f"🚑 **{name}**")
+            st.write(f"TÜV: {datum}  {status}")
+            st.divider()
