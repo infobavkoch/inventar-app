@@ -1,38 +1,85 @@
 import sqlite3
 
-def get_connection():
-    conn = sqlite3.connect("inventar.db", check_same_thread=False)
-    return conn
+conn = sqlite3.connect("data/database.db", check_same_thread=False)
+cursor = conn.cursor()
 
-def init_db():
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS fahrzeuge (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+bezeichnung TEXT,
+kennzeichen TEXT,
+funkrufname TEXT,
+tuev TEXT
+)
+""")
 
-    conn = get_connection()
-    c = conn.cursor()
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS feuerloescher (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+fahrzeug_id INTEGER,
+nummer TEXT,
+pruefung TEXT
+)
+""")
 
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS users(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT,
-    role TEXT
-    )
-    """)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS sauerstoff (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+fahrzeug_id INTEGER,
+nummer TEXT,
+pruefung TEXT
+)
+""")
 
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS fahrzeuge(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    bezeichnung TEXT,
-    kennzeichen TEXT,
-    funkrufname TEXT
-    )
-    """)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS wartung (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+fahrzeug_id INTEGER,
+datum TEXT,
+notizen TEXT
+)
+""")
 
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS tuev(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    fahrzeug_id INTEGER,
-    termin TEXT
-    )
-    """)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS elektrisch (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+fahrzeug_id INTEGER,
+datum TEXT
+)
+""")
 
-    conn.commit()
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS meetb (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+fahrzeug_id INTEGER,
+name TEXT,
+nummer TEXT,
+pruefung TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS tragelagerung (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+bezeichnung TEXT,
+sicht TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS beleuchtung (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT,
+pruefung TEXT
+)
+""")
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS fi_check (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+bezeichnung TEXT,
+datum TEXT
+)
+""")
+
+conn.commit()
