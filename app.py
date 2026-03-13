@@ -1,7 +1,11 @@
+from components.scanner import scanner
+from auth import login
 import streamlit as st
 from components.dashboard import dashboard
 
 st.set_page_config(
+if not login():
+    st.stop()
 page_title="Inventarverwaltung",
 layout="wide"
 )
@@ -17,7 +21,9 @@ seite = st.sidebar.radio(
 "Dashboard",
 "Fahrzeuge",
 "Ortsverein",
-"Lerchenstraße"
+"Lerchenstraße",
+"Kalender",
+"Scanner"
 ]
 )
 
@@ -32,3 +38,6 @@ if seite == "Ortsverein":
 
 if seite == "Lerchenstraße":
     st.switch_page("pages/lerchenstrasse.py")
+
+if seite == "Scanner":
+    scanner()

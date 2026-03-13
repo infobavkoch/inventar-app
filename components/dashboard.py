@@ -1,10 +1,11 @@
+from components.email_reminder import check_pruefungen
 import streamlit as st
 from database import cursor
 from datetime import datetime
 from components.utils import pruef_status
 
 def dashboard():
-
+check_pruefungen()
     st.header("Dashboard")
 
     cursor.execute("SELECT bezeichnung,tuev FROM fahrzeuge")

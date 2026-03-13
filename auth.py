@@ -1,34 +1,34 @@
-import streamlit as st
-import hashlib
-from database import get_connection
+import streamlit_authenticator as stauth
 
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+names = ["Admin"]
+usernames = ["admin"]
+
+passwords = ["admin123"]
+
+hashed_passwords = stauth.Hasher(passwords).generate()
+
+authenticator = stauth.Authenticate(
+names,
+usernames,
+hashed_passwords,
+"inventar_app",
+"abcdef",
+cookie_expiry_days=1
+)
 
 def login():
 
-    conn = get_connection()
-    c = conn.cursor()
+    name, authentication_status, username = authenticator.login("Login","main")
 
-    st.title("🔐 Inventar Login")
+    if authentication_status:
+        return True
 
-    username = st.text_input("Benutzername")
-    password = st.text_input("Passwort", type="password")
+    elif authentication_status == False:
+        import streamlit as st
+        st.error("Login falsch")
 
-    if st.button("Login"):
+    elif authentication_status == None:
+        import streamlit as st
+        st.warning("Bitte einloggen")
 
-        hashed = hash_password(password)
-
-        c.execute(
-        "SELECT * FROM users WHERE username=? AND password=?",
-        (username, hashed)
-        )
-
-        user = c.fetchone()
-
-        if user:
-            st.session_state["user"] = username
-            st.session_state["role"] = user[3]
-            st.rerun()
-        else:
-            st.error("Login fehlgeschlagen")
+    return False

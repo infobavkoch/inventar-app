@@ -3,3 +3,6 @@ pandas
 sqlalchemy
 qrcode
 pillow
+streamlit-authenticator
+yagmail
+opencv-python
