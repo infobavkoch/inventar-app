@@ -1,34 +1,25 @@
-import streamlit_authenticator as stauth
-
-names = ["Admin"]
-usernames = ["admin"]
-
-passwords = ["admin123"]
-
-hashed_passwords = stauth.Hasher(passwords).generate()
-
-authenticator = stauth.Authenticate(
-names,
-usernames,
-hashed_passwords,
-"inventar_app",
-"abcdef",
-cookie_expiry_days=1
-)
+import streamlit as st
 
 def login():
 
-    name, authentication_status, username = authenticator.login("Login","main")
+    if "login" not in st.session_state:
+        st.session_state.login = False
 
-    if authentication_status:
+    if st.session_state.login:
         return True
 
-    elif authentication_status == False:
-        import streamlit as st
-        st.error("Login falsch")
+    st.title("Login")
 
-    elif authentication_status == None:
-        import streamlit as st
-        st.warning("Bitte einloggen")
+    user = st.text_input("Benutzer")
+    pw = st.text_input("Passwort", type="password")
+
+    if st.button("Login"):
+
+        if user == "admin" and pw == "1234":
+            st.session_state.login = True
+            st.rerun()
+
+        else:
+            st.error("Login falsch")
 
     return False
