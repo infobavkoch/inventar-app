@@ -4,7 +4,19 @@ from auth import login
 from datetime import datetime
 
 init_db()
+import hashlib
 
+conn = get_connection()
+c = conn.cursor()
+
+# Admin automatisch erstellen falls keiner existiert
+if not c.execute("SELECT * FROM users WHERE username='admin'").fetchone():
+    pw = hashlib.sha256("admin123".encode()).hexdigest()
+    c.execute(
+        "INSERT INTO users (username,password,role) VALUES (?,?,?)",
+        ("admin", pw, "admin")
+    )
+    conn.commit()
 if "user" not in st.session_state:
     login()
     st.stop()
