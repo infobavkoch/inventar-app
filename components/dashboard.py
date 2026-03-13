@@ -1,3 +1,4 @@
+from components.ui.full_calendar import kalender
 import streamlit as st
 from database import cursor
 from datetime import datetime
@@ -49,3 +50,5 @@ def dashboard():
     st.divider()
 
     pruefkalender()
+st.divider()
+kalender()
